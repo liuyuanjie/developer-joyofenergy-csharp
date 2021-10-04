@@ -23,10 +23,10 @@ namespace JOIEnergy.Tests
         {
             var readings = new Dictionary<string, List<Domain.ElectricityReading>>();
             meterReadingService = new MeterReadingService(readings);
-            var pricePlans = new List<PricePlan>() { 
-                new PricePlan() { EnergySupplier = Supplier.DrEvilsDarkEnergy, UnitRate = 10, PeakTimeMultiplier = NoMultipliers() }, 
+            var pricePlans = new List<PricePlan>() {
+                new PricePlan() { EnergySupplier = Supplier.DrEvilsDarkEnergy, UnitRate = 10, PeakTimeMultiplier = NoMultipliers() },
                 new PricePlan() { EnergySupplier = Supplier.TheGreenEco, UnitRate = 2, PeakTimeMultiplier = NoMultipliers() },
-                new PricePlan() { EnergySupplier = Supplier.PowerForEveryone, UnitRate = 1, PeakTimeMultiplier = NoMultipliers() } 
+                new PricePlan() { EnergySupplier = Supplier.PowerForEveryone, UnitRate = 1, PeakTimeMultiplier = NoMultipliers() }
             };
             var pricePlanService = new PricePlanService(pricePlans, meterReadingService);
             var accountService = new AccountService(smartMeterToPricePlanAccounts);
@@ -42,7 +42,7 @@ namespace JOIEnergy.Tests
 
             var result = controller.CalculatedCostForEachPricePlan(SMART_METER_ID).Value;
 
-            var actualCosts = ((JObject)result).ToObject<Dictionary<string, decimal>>();
+            var actualCosts = (Dictionary<string, decimal>)result;
             Assert.Equal(3, actualCosts.Count);
             Assert.Equal(100m, actualCosts["" + Supplier.DrEvilsDarkEnergy], 3);
             Assert.Equal(20m, actualCosts["" + Supplier.TheGreenEco], 3);
@@ -70,7 +70,7 @@ namespace JOIEnergy.Tests
         }
 
         [Fact]
-        public void ShouldRecommendLimitedCheapestPricePlansForMeterUsage() 
+        public void ShouldRecommendLimitedCheapestPricePlansForMeterUsage()
         {
             meterReadingService.StoreReadings(SMART_METER_ID, new List<ElectricityReading>() {
                 new ElectricityReading() { Time = DateTime.Now.AddMinutes(-45), Reading = 5m },

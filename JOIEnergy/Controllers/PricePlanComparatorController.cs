@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using JOIEnergy.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace JOIEnergy.Controllers
 {
+    [ApiController]
     [Route("price-plans")]
-    public class PricePlanComparatorController : Controller
+    public class PricePlanComparatorController : ControllerBase
     {
         private readonly IPricePlanService _pricePlanService;
         private readonly IAccountService _accountService;
@@ -30,12 +29,10 @@ namespace JOIEnergy.Controllers
                 return new NotFoundObjectResult(string.Format("Smart Meter ID ({0}) not found", smartMeterId));
             }
 
-            dynamic response = JObject.FromObject(costPerPricePlan);
-
             return
                 costPerPricePlan.Any() ? 
-                new ObjectResult(response) : 
-                new NotFoundObjectResult(string.Format("Smart Meter ID ({0}) not found", smartMeterId));
+                new ObjectResult(costPerPricePlan) : 
+                new BadRequestObjectResult(string.Format("Smart Meter ID ({0}) not found", smartMeterId));
         }
 
         [HttpGet("recommend/{smartMeterId}")]

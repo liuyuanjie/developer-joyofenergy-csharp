@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JOIEnergy.Domain;
 using JOIEnergy.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JOIEnergy.Controllers
 {
+    [ApiController]
     [Route("readings")]
-    public class MeterReadingController : Controller
+    public class MeterReadingController : ControllerBase
     {
         private readonly IMeterReadingService _meterReadingService;
 
