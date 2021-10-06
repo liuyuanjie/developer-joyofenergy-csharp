@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using JOIEnergy.Domain;
-using JOIEnergy.Enums;
+using JOIEnergy.Domain.Entity;
+using JOIEnergy.Domain.Enums;
 using JOIEnergy.Generator;
 using JOIEnergy.Services;
 using Microsoft.AspNetCore.Builder;
@@ -31,17 +32,17 @@ namespace JOIEnergy
 
             var pricePlans = new List<PricePlan> {
                 new PricePlan{
-                    EnergySupplier = Enums.Supplier.DrEvilsDarkEnergy,
+                    EnergySupplier = Supplier.DrEvilsDarkEnergy,
                     UnitRate = 10m,
                     PeakTimeMultiplier = new List<PeakTimeMultiplier>()
                 },
                 new PricePlan{
-                    EnergySupplier = Enums.Supplier.TheGreenEco,
+                    EnergySupplier = Supplier.TheGreenEco,
                     UnitRate = 2m,
                     PeakTimeMultiplier = new List<PeakTimeMultiplier>()
                 },
                 new PricePlan{
-                    EnergySupplier = Enums.Supplier.PowerForEveryone,
+                    EnergySupplier = Supplier.PowerForEveryone,
                     UnitRate = 1m,
                     PeakTimeMultiplier = new List<PeakTimeMultiplier>()
                 }

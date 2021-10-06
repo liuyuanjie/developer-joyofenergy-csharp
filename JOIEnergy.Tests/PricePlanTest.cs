@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using JOIEnergy.Domain;
-using JOIEnergy.Enums;
+using JOIEnergy.Domain.Entity;
+using JOIEnergy.Domain.Enums;
 using Xunit;
 
 namespace JOIEnergy.Tests

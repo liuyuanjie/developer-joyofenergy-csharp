@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JOIEnergy.Domain;
+using JOIEnergy.Domain.Entity;
 
 namespace JOIEnergy.Services
 {

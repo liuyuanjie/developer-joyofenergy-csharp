@@ -1,5 +1,4 @@
-﻿using System;
-namespace JOIEnergy.Enums
+﻿namespace JOIEnergy.Domain.Enums
 {
     public enum Supplier
     {

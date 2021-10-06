@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JOIEnergy.Enums;
+using JOIEnergy.Domain.Enums;
 
-namespace JOIEnergy.Domain
+namespace JOIEnergy.Domain.Entity
 {
-    public class PricePlan
+    public class PricePlan : EntityBase
     {
         public Supplier EnergySupplier { get; set; }
         public decimal UnitRate { get; set; }
@@ -24,6 +24,7 @@ namespace JOIEnergy.Domain
 
     public class PeakTimeMultiplier
     {
+        public Guid PricePlanId { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public decimal Multiplier { get; set; }
     }

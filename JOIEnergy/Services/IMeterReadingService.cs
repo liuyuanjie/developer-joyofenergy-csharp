@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using JOIEnergy.Domain;
+using JOIEnergy.Domain.Entity;
 
 namespace JOIEnergy.Services
 {

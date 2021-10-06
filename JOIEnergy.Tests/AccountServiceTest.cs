@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using JOIEnergy.Enums;
+using JOIEnergy.Domain.Enums;
 using JOIEnergy.Services;
 using Xunit;
 

@@ -1,9 +1,16 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JOIEnergy", "JOIEnergy\JOIEnergy.csproj", "{BF722F65-2C35-4ADF-B669-C7841E4E54E6}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JOIEnergy", "JOIEnergy\JOIEnergy.csproj", "{BF722F65-2C35-4ADF-B669-C7841E4E54E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JOIEnergy.Tests", "JOIEnergy.Tests\JOIEnergy.Tests.csproj", "{92951323-A02D-4FC7-A0E3-0C4F37BD7AB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JOIEnergy.Tests", "JOIEnergy.Tests\JOIEnergy.Tests.csproj", "{92951323-A02D-4FC7-A0E3-0C4F37BD7AB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JOIEnergy.Domain", "JOIEnergy.Domain\JOIEnergy.Domain.csproj", "{BC101BDA-A57F-4812-A77E-B1634C2958B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{53E9AB26-4921-479F-A126-9340AD9F33D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{757626E3-191F-4CF1-8A6D-9980C190BC6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,5 +26,18 @@ Global
 		{92951323-A02D-4FC7-A0E3-0C4F37BD7AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92951323-A02D-4FC7-A0E3-0C4F37BD7AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92951323-A02D-4FC7-A0E3-0C4F37BD7AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC101BDA-A57F-4812-A77E-B1634C2958B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC101BDA-A57F-4812-A77E-B1634C2958B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC101BDA-A57F-4812-A77E-B1634C2958B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC101BDA-A57F-4812-A77E-B1634C2958B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BC101BDA-A57F-4812-A77E-B1634C2958B9} = {757626E3-191F-4CF1-8A6D-9980C190BC6A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A5E2757-8BF7-49A9-9974-CD9324575F79}
 	EndGlobalSection
 EndGlobal
