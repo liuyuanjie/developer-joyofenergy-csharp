@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
+using Dapper;
+using JOIEnergy.Application;
+using JOIEnergy.Application.Model;
+using JOIEnergy.Application.Services;
 using JOIEnergy.Domain.Enums;
-using JOIEnergy.Services;
+using Moq;
+using Moq.Dapper;
 using Xunit;
 
 namespace JOIEnergy.Tests
@@ -9,30 +15,55 @@ namespace JOIEnergy.Tests
     public class AccountServiceTest
     {
         private const Supplier PRICE_PLAN_ID = Supplier.PowerForEveryone;
-        private const String SMART_METER_ID = "smart-meter-id";
+        private const string SMART_METER_ID = "smart-meter-id";
 
-        private AccountService accountService;
+        private readonly AccountService _accountService;
+        private readonly Mock<IConnection> _mockConnection;
+        private readonly Mock<IDbConnection> _mockDbConnection;
 
         public AccountServiceTest()
         {
-            Dictionary<String, Supplier> smartMeterToPricePlanAccounts = new Dictionary<string, Supplier>();
-            smartMeterToPricePlanAccounts.Add(SMART_METER_ID, PRICE_PLAN_ID);
+            _mockConnection = new Mock<IConnection>();
+            _mockDbConnection = new Mock<IDbConnection>();
+            _mockConnection.Setup(x => x.OpenConnection())
+                .Returns(_mockDbConnection.Object);
 
-            accountService = new AccountService(smartMeterToPricePlanAccounts);
+            _accountService = new AccountService(_mockConnection.Object);
         }
 
         [Fact]
         public void GivenTheSmartMeterIdReturnsThePricePlanId()
         {
-            var result = accountService.GetPricePlanIdForSmartMeterId("smart-meter-id");
-            Assert.Equal(Supplier.PowerForEveryone, result);
+            //Arrange
+            _mockDbConnection.SetupDapper(x => x.ExecuteScalar<AccountEnergyCompanyPricePlanModel>(It.IsAny<string>(),
+                    It.IsAny<object>(),
+                    It.IsAny<IDbTransaction>(), It.IsAny<int?>(), It.IsAny<CommandType?>()))
+                .Returns(new AccountEnergyCompanyPricePlanModel
+                {
+                    CompanySupplier = PRICE_PLAN_ID
+                });
+
+            //Act
+            var result = _accountService.GetAccountEnergyCompanyPricePlanForSmartMeterId("smart-meter-id");
+
+            //Assert
+            Assert.Equal(Supplier.PowerForEveryone, result.CompanySupplier);
         }
 
         [Fact]
         public void GivenAnUnknownSmartMeterIdReturnsANullSupplier()
         {
-            var result = accountService.GetPricePlanIdForSmartMeterId("bob-carolgees");
-            Assert.Equal(Supplier.NullSupplier, result);
+            //Arrange
+            _mockDbConnection.SetupDapper(x => x.ExecuteScalar<AccountEnergyCompanyPricePlanModel>(It.IsAny<string>(),
+                    It.IsAny<object>(),
+                    It.IsAny<IDbTransaction>(), It.IsAny<int?>(), It.IsAny<CommandType?>()))
+                .Returns(new AccountEnergyCompanyPricePlanModel());
+
+            //Act
+            var result = _accountService.GetAccountEnergyCompanyPricePlanForSmartMeterId("bob-carolgees");
+
+            //Assert
+            Assert.Equal(Supplier.NullSupplier, result.CompanySupplier);
         }
     }
 }

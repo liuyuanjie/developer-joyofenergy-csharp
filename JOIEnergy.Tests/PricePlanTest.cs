@@ -14,9 +14,9 @@ namespace JOIEnergy.Tests
         {
             _pricePlan = new PricePlan
             {
-                EnergySupplier = Supplier.TheGreenEco,
+                Name = Supplier.TheGreenEco.ToString(),
                 UnitRate = 20m,
-                PeakTimeMultiplier = new List<PeakTimeMultiplier> {
+                PeakTimeMultipliers = new List<PeakTimeMultiplier> {
                     new PeakTimeMultiplier { 
                         DayOfWeek = DayOfWeek.Saturday,
                         Multiplier = 2m
@@ -31,7 +31,7 @@ namespace JOIEnergy.Tests
 
         [Fact]
         public void TestGetEnergySupplier() {
-            Assert.Equal(Supplier.TheGreenEco, _pricePlan.EnergySupplier);
+            Assert.Equal(Supplier.TheGreenEco.ToString(), _pricePlan.Name);
         }
 
         [Fact]
