@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JOIEnergy.Domain.Enums;
 
 namespace JOIEnergy.Domain.Entity
 {
     public class PricePlan : EntityBase
     {
-        public Supplier EnergySupplier { get; set; }
+        public Guid EnergyCompanyId { get; set; }
+        public string Name { get; set; }
         public decimal UnitRate { get; set; }
-        public IList<PeakTimeMultiplier> PeakTimeMultiplier { get; set;}
+        public virtual IList<PeakTimeMultiplier> PeakTimeMultipliers { get; set;}
 
         public decimal GetPrice(DateTime datetime) {
-            var multiplier = PeakTimeMultiplier.FirstOrDefault(m => m.DayOfWeek == datetime.DayOfWeek);
+            var multiplier = PeakTimeMultipliers.FirstOrDefault(m => m.DayOfWeek == datetime.DayOfWeek);
 
             if (multiplier?.Multiplier != null) {
                 return multiplier.Multiplier * UnitRate;
@@ -20,12 +20,24 @@ namespace JOIEnergy.Domain.Entity
                 return UnitRate;
             }
         }
-    }
 
-    public class PeakTimeMultiplier
-    {
-        public Guid PricePlanId { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
-        public decimal Multiplier { get; set; }
+        public static PricePlan Create(string name, decimal unitRate)
+        {
+            return new PricePlan
+            {
+                Name = name,
+                UnitRate = unitRate
+            };
+        }
+
+        public void AddPeakTimeMultiplier(DayOfWeek dayOfWeek, decimal multiplier)
+        {
+            if (PeakTimeMultipliers == null)
+            {
+                PeakTimeMultipliers = new List<PeakTimeMultiplier>();
+            }
+
+            PeakTimeMultipliers.Add(PeakTimeMultiplier.Create(dayOfWeek, multiplier));
+        }
     }
 }
