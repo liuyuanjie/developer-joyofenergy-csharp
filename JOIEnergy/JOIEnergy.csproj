@@ -6,16 +6,24 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-    <Folder Include="Services\" />
-    <Folder Include="Generator\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JOIEnergy.Application\JOIEnergy.Application.csproj" />
     <ProjectReference Include="..\JOIEnergy.Domain\JOIEnergy.Domain.csproj" />
+    <ProjectReference Include="..\JOIEnergy.Infrastructure.EF\JOIEnergy.Infrastructure.EF.csproj" />
+    <ProjectReference Include="..\JOIEnergy.Infrastructure.Share\JOIEnergy.Infrastructure.Share.csproj" />
   </ItemGroup>
 
 </Project>

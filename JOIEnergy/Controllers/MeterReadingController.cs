@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using JOIEnergy.Domain.Entity;
-using JOIEnergy.Services;
+﻿using System.Threading.Tasks;
+using JOIEnergy.Application;
+using JOIEnergy.Application.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,35 +13,25 @@ namespace JOIEnergy.Controllers
     public class MeterReadingController : ControllerBase
     {
         private readonly IMeterReadingService _meterReadingService;
+        private readonly IMediator _mediator;
 
-        public MeterReadingController(IMeterReadingService meterReadingService)
+        public MeterReadingController(IMeterReadingService meterReadingService, IMediator mediator)
         {
             _meterReadingService = meterReadingService;
+            _mediator = mediator;
         }
         // POST api/values
         [HttpPost("store")]
-        public ObjectResult Post([FromBody] MeterReadings meterReadings)
+        public async Task<IActionResult> Post([FromBody] ElectricityReadingCommand electricityReadingCommand)
         {
-            if (!IsMeterReadingsValid(meterReadings))
-            {
-                return new BadRequestObjectResult("Internal Server Error");
-            }
-            _meterReadingService.StoreReadings(meterReadings.SmartMeterId, meterReadings.ElectricityReadings);
-            return new OkObjectResult("{}");
-        }
-
-        private bool IsMeterReadingsValid(MeterReadings meterReadings)
-        {
-            String smartMeterId = meterReadings.SmartMeterId;
-            List<ElectricityReading> electricityReadings = meterReadings.ElectricityReadings;
-            return smartMeterId != null && smartMeterId.Any()
-                    && electricityReadings != null && electricityReadings.Any();
+            await _mediator.Send(electricityReadingCommand);
+            return Ok();
         }
 
         [HttpGet("read/{smartMeterId}")]
-        public ObjectResult GetReading(string smartMeterId)
+        public IActionResult GetReading(string smartMeterId)
         {
-            return new OkObjectResult(_meterReadingService.GetReadings(smartMeterId));
+            return Ok(_meterReadingService.GetReadings(smartMeterId));
         }
     }
 }

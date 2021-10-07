@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using JOIEnergy.Services;
+using JOIEnergy.Application;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,47 +10,41 @@ namespace JOIEnergy.Controllers
     [Route("price-plans")]
     public class PricePlanComparatorController : ControllerBase
     {
-        private readonly IPricePlanService _pricePlanService;
-        private readonly IAccountService _accountService;
+        private readonly IPricePlanComparatorService _pricePlanComparatorService;
 
-        public PricePlanComparatorController(IPricePlanService pricePlanService, IAccountService accountService)
+        public PricePlanComparatorController(IPricePlanComparatorService pricePlanComparatorService)
         {
-            this._pricePlanService = pricePlanService;
-            this._accountService = accountService;
+            _pricePlanComparatorService = pricePlanComparatorService;
         }
 
         [HttpGet("compare-all/{smartMeterId}")]
         public ObjectResult CalculatedCostForEachPricePlan(string smartMeterId)
         {
-            var pricePlanId = _accountService.GetPricePlanIdForSmartMeterId(smartMeterId);
-            var costPerPricePlan = _pricePlanService.GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
+            var costPerPricePlan = _pricePlanComparatorService.GetAllUsageCostPricePlans(smartMeterId);
             if (!costPerPricePlan.Any())
             {
-                return new NotFoundObjectResult(string.Format("Smart Meter ID ({0}) not found", smartMeterId));
+                return new NotFoundObjectResult($"Smart Meter ID ({smartMeterId}) not found");
             }
 
             return
-                costPerPricePlan.Any() ? 
-                new ObjectResult(costPerPricePlan) : 
-                new BadRequestObjectResult(string.Format("Smart Meter ID ({0}) not found", smartMeterId));
+                costPerPricePlan.Any() ?
+                new ObjectResult(costPerPricePlan) :
+                new BadRequestObjectResult($"Smart Meter ID ({smartMeterId}) not found");
         }
 
         [HttpGet("recommend/{smartMeterId}")]
-        public ObjectResult RecommendCheapestPricePlans(string smartMeterId, int? limit = null) {
-            var consumptionForPricePlans = _pricePlanService.GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
+        public ObjectResult RecommendCheapestPricePlans(string smartMeterId, int? limit = null)
+        {
+            var consumptionForPricePlans = limit.HasValue && limit.Value > 0
+                ? _pricePlanComparatorService.GetRecommendedUsageCostPricePlans(smartMeterId, limit.Value)
+                : _pricePlanComparatorService.GetAllUsageCostPricePlans(smartMeterId);
 
-            if (!consumptionForPricePlans.Any()) {
-                return new NotFoundObjectResult(string.Format("Smart Meter ID ({0}) not found", smartMeterId));
-            }
-
-            var recommendations = consumptionForPricePlans.OrderBy(pricePlanComparison => pricePlanComparison.Value);
-
-            if (limit.HasValue && limit.Value < recommendations.Count())
+            if (!consumptionForPricePlans.Any())
             {
-                return new ObjectResult(recommendations.Take(limit.Value));
+                return new NotFoundObjectResult($"Smart Meter ID ({smartMeterId}) not found");
             }
 
-            return new ObjectResult(recommendations);
+            return new ObjectResult(consumptionForPricePlans);
         }
     }
 }
