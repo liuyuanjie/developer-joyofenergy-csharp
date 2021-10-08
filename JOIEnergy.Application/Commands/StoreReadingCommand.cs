@@ -13,7 +13,7 @@ namespace JOIEnergy.Application.Commands
     public class ElectricityReadingCommand : IRequest<int>
     {
         public string SmartMeterId { get; set; }
-        public List<ElectricityReadingModel> ElectricityReadingModels { get; set; }
+        public List<ElectricityReadingModel> ElectricityReadings { get; set; }
     }
 
     public class StoreReadingCommandHandler : IRequestHandler<ElectricityReadingCommand, int>
@@ -29,7 +29,7 @@ namespace JOIEnergy.Application.Commands
             var smartMeter = _repository.Query().FirstOrDefault(x => x.SmartMeterId == request.SmartMeterId)
                              ?? SmartMeter.Create(request.SmartMeterId);
 
-            request.ElectricityReadingModels
+            request.ElectricityReadings
                 .ForEach(electricityReading => smartMeter.CreateElectricityReading(electricityReading.Time.ToUniversalTime(), electricityReading.Reading));
 
             _repository.Update(smartMeter);

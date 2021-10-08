@@ -42,7 +42,7 @@ namespace JOIEnergy.Application.Services
             var smartMeter = _repository.Query().FirstOrDefault(x => x.SmartMeterId == command.SmartMeterId)
                              ?? SmartMeter.Create(command.SmartMeterId);
 
-            command.ElectricityReadingModels
+            command.ElectricityReadings
                 .ForEach(electricityReading => smartMeter.CreateElectricityReading(electricityReading.Time, electricityReading.Reading));
 
             _repository.Update(smartMeter);
@@ -52,7 +52,7 @@ namespace JOIEnergy.Application.Services
         private bool IsMeterReadingsValid(ElectricityReadingCommand electricityReadingCommand)
         {
             var smartMeterId = electricityReadingCommand.SmartMeterId;
-            List<ElectricityReadingModel> electricityReadings = electricityReadingCommand.ElectricityReadingModels;
+            List<ElectricityReadingModel> electricityReadings = electricityReadingCommand.ElectricityReadings;
             return smartMeterId != null && smartMeterId.Any()
                                         && electricityReadings != null && electricityReadings.Any();
         }
