@@ -9,8 +9,8 @@ namespace JOIEnergy.Application.Commands
         public StoreReadingCommandValidator()
         {
             RuleFor(c => c.SmartMeterId).NotEmpty();
-            RuleFor(c => c.ElectricityReadingModels).NotEmpty();
-            RuleForEach(c => c.ElectricityReadingModels).SetValidator(new ElectricityReadingValidator());
+            RuleFor(c => c.ElectricityReadings).NotEmpty();
+            RuleForEach(c => c.ElectricityReadings).SetValidator(new ElectricityReadingValidator());
         }
     }
 

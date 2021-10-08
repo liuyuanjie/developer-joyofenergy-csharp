@@ -94,7 +94,7 @@ namespace JOIEnergy.Tests
             _meterReadingService.StoreReadings(new ElectricityReadingCommand
             {
                 SmartMeterId = SMART_METER_ID,
-                ElectricityReadingModels = new List<ElectricityReadingModel>() {
+                ElectricityReadings = new List<ElectricityReadingModel>() {
                     electricityReadingModel
                 }
             });
