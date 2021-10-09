@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JOIEnergy.Domain;
 
-namespace JOIEnergy.Domain.Interfaces
+namespace JOIEnergy.Application.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : IEntity
     {

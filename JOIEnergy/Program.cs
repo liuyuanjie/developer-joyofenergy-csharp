@@ -1,5 +1,5 @@
 ﻿using System;
-using JOIEnergy.Domain.Interfaces;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Infrastructure.EF;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

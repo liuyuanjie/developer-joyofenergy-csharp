@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JOIEnergy.Application.Exception;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Application.Model;
 using JOIEnergy.Domain.Entity;
-using JOIEnergy.Domain.Interfaces;
 using MediatR;
 
 namespace JOIEnergy.Application.Commands
@@ -33,7 +33,7 @@ namespace JOIEnergy.Application.Commands
                 .ForEach(electricityReading => smartMeter.CreateElectricityReading(electricityReading.Time.ToUniversalTime(), electricityReading.Reading));
 
             _repository.Update(smartMeter);
-            return await _repository.UnitOfWork.CommitAsync();
+            return await _repository.UnitOfWork.CommitAsync(cancellationToken);
         }
     }
 }

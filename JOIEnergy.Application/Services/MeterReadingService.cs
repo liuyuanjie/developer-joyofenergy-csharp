@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Dapper;
 using JOIEnergy.Application.Commands;
 using JOIEnergy.Application.Exception;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Application.Model;
 using JOIEnergy.Domain.Entity;
-using JOIEnergy.Domain.Interfaces;
 
 namespace JOIEnergy.Application.Services
 {

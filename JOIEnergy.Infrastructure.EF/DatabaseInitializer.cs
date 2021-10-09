@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Domain.Entity;
 using JOIEnergy.Domain.Enums;
-using JOIEnergy.Domain.Interfaces;
 
 namespace JOIEnergy.Infrastructure.EF
 {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Domain.Entity;
-using JOIEnergy.Domain.Interfaces;
 using JOIEnergy.Infrastructure.EF.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 

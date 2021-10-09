@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using JOIEnergy.Domain.Interfaces;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Infrastructure.EF;
 using Microsoft.Extensions.DependencyInjection;
 

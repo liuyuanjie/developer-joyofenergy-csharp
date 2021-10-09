@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-using JOIEnergy.Application;
+﻿using JOIEnergy.Application;
 using JOIEnergy.Application.Extensions;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Application.Services;
 using JOIEnergy.Application.UsageCostPricePlan;
-using JOIEnergy.Domain.Interfaces;
 using JOIEnergy.Extensions;
 using JOIEnergy.Infrastructure.EF;
 using JOIEnergy.Middlewares;

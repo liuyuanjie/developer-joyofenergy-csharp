@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace JOIEnergy.Domain.Interfaces
+namespace JOIEnergy.Application.Interfaces
 {
     public interface IUnitOfWork
     {

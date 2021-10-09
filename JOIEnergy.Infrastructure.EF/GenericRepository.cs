@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Domain;
-using JOIEnergy.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace JOIEnergy.Infrastructure.EF

@@ -6,10 +6,10 @@ using System.Threading;
 using Dapper;
 using JOIEnergy.Application;
 using JOIEnergy.Application.Commands;
+using JOIEnergy.Application.Interfaces;
 using JOIEnergy.Application.Model;
 using JOIEnergy.Application.Services;
 using JOIEnergy.Domain.Entity;
-using JOIEnergy.Domain.Interfaces;
 using Moq;
 using Moq.Dapper;
 using Xunit;
@@ -97,7 +97,7 @@ namespace JOIEnergy.Tests
                 ElectricityReadings = new List<ElectricityReadingModel>() {
                     electricityReadingModel
                 }
-            });
+            }).Wait();
 
             //Assert
             var electricityReadings = _meterReadingService.GetReadings(SMART_METER_ID);
