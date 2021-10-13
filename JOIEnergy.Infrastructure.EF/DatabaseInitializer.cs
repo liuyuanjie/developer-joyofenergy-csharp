@@ -57,7 +57,7 @@ namespace JOIEnergy.Infrastructure.EF
                 {
                     EnergyCompanyId = energyCompanies.First(x => x.Supplier == Supplier.DrEvilsDarkEnergy).Id,
                     Name = energyCompanies.First(x => x.Supplier == Supplier.DrEvilsDarkEnergy).Supplier.ToString(),
-                    UnitRate = 10m,
+                    UnitRate = 10m
                 },
                 new PricePlan
                 {
@@ -72,6 +72,11 @@ namespace JOIEnergy.Infrastructure.EF
                     UnitRate = 1m,
                 }
             };
+
+            pricePlans.ForEach(x =>
+            {
+                x.AddPeakTimeMultiplier(DayOfWeek.Monday, 10m);
+            });
 
             return pricePlans;
         }
