@@ -73,10 +73,10 @@ namespace JOIEnergy.Infrastructure.EF
                 }
             };
 
-            pricePlans.ForEach(x =>
-            {
-                x.AddPeakTimeMultiplier(DayOfWeek.Monday, 10m);
-            });
+            //pricePlans.ForEach(x =>
+            //{
+            //    x.AddPeakTimeMultiplier(DayOfWeek.Monday, 10m);
+            //});
 
             return pricePlans;
         }
