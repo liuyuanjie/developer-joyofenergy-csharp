@@ -4,11 +4,11 @@ using JOIEnergy.Domain.Entity;
 using JOIEnergy.Domain.Enums;
 using Xunit;
 
-namespace JOIEnergy.Tests
+namespace JOIEnergy.Tests.Domain
 {
     public class PricePlanTest
     {
-        private PricePlan _pricePlan;
+        private readonly PricePlan _pricePlan;
 
         public PricePlanTest()
         {

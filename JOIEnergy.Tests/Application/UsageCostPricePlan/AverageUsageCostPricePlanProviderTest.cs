@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using JOIEnergy.Application;
 using JOIEnergy.Application.Model;
 using JOIEnergy.Application.UsageCostPricePlan;
 using JOIEnergy.Domain.Enums;
-using Moq;
 using Xunit;
 
-namespace JOIEnergy.Tests
+namespace JOIEnergy.Tests.Application.UsageCostPricePlan
 {
-    public class AverageUsageCostPricePlanProviderTest
+    public class AverageUsageCostPricePlanProviderTest: UsageCostPricePlanBase
     {
-        private readonly Mock<IMeterReadingService> _mockMeterReadingService;
-        private readonly Mock<IPricePlanService> _mockPricePlanService;
         private readonly AverageUsageCostPricePlanProvider _usageCostPricePlanProvider;
         private static string SMART_METER_ID = "smart-meter-id";
 
         public AverageUsageCostPricePlanProviderTest()
         {
-            _mockMeterReadingService = new Mock<IMeterReadingService>();
-            _mockPricePlanService = new Mock<IPricePlanService>();
-
-            _mockPricePlanService.Setup(x => x.GetPricePlans())
+            PricePlanServiceMock.Setup(x => x.GetPricePlans())
                 .Returns(new List<EnergyCompanyPricePlanModel>()
                 {
                     new EnergyCompanyPricePlanModel()
@@ -44,14 +37,14 @@ namespace JOIEnergy.Tests
                     },
                 });
 
-            _usageCostPricePlanProvider = new AverageUsageCostPricePlanProvider(_mockPricePlanService.Object, _mockMeterReadingService.Object);
+            _usageCostPricePlanProvider = new AverageUsageCostPricePlanProvider(PricePlanServiceMock.Object, MeterReadingServiceMock.Object);
         }
 
         [Fact]
         public void ShouldCalculateCostForMeterReadingsForEveryPricePlan()
         {
             //Arrange
-            _mockMeterReadingService.Setup(x => x.GetReadings(SMART_METER_ID))
+            MeterReadingServiceMock.Setup(x => x.GetReadings(SMART_METER_ID))
                 .Returns(new List<ElectricityReadingModel>
                 {
                     new ElectricityReadingModel() { Time = DateTime.Now.AddHours(-1), Reading = 15.0m },
@@ -63,16 +56,16 @@ namespace JOIEnergy.Tests
 
             //Assert
             Assert.Equal(3, actualCosts.Count);
-            Assert.Equal(100m, actualCosts["" + Supplier.DrEvilsDarkEnergy], 3);
-            Assert.Equal(20m, actualCosts["" + Supplier.TheGreenEco], 3);
-            Assert.Equal(10m, actualCosts["" + Supplier.PowerForEveryone], 3);
+            Assert.Equal(100m, actualCosts[Supplier.DrEvilsDarkEnergy.ToString()], 3);
+            Assert.Equal(20m, actualCosts[Supplier.TheGreenEco.ToString()], 3);
+            Assert.Equal(10m, actualCosts[Supplier.PowerForEveryone.ToString()], 3);
         }
 
         [Fact]
         public void ShouldRecommendCheapestPricePlansNoLimitForMeterUsage()
         {
             //Arrange
-            _mockMeterReadingService.Setup(x => x.GetReadings(SMART_METER_ID))
+            MeterReadingServiceMock.Setup(x => x.GetReadings(SMART_METER_ID))
                 .Returns(new List<ElectricityReadingModel>
                 {
                     new ElectricityReadingModel() { Time = DateTime.Now.AddMinutes(-30), Reading = 35m },
@@ -84,16 +77,16 @@ namespace JOIEnergy.Tests
 
             //Assert
             Assert.Equal(3, actualCosts.Count);
-            Assert.Equal(380m, actualCosts["" + Supplier.DrEvilsDarkEnergy], 3);
-            Assert.Equal(76m, actualCosts["" + Supplier.TheGreenEco], 3);
-            Assert.Equal(38m, actualCosts["" + Supplier.PowerForEveryone], 3);
+            Assert.Equal(380m, actualCosts[Supplier.DrEvilsDarkEnergy.ToString()], 3);
+            Assert.Equal(76m, actualCosts[Supplier.TheGreenEco.ToString()], 3);
+            Assert.Equal(38m, actualCosts[Supplier.PowerForEveryone.ToString()], 3);
         }
 
         [Fact]
         public void ShouldRecommendLimitedCheapestPricePlansForMeterUsage()
         {
             //Arrange
-            _mockMeterReadingService.Setup(x => x.GetReadings(SMART_METER_ID))
+            MeterReadingServiceMock.Setup(x => x.GetReadings(SMART_METER_ID))
                 .Returns(new List<ElectricityReadingModel>
                 {
                     new ElectricityReadingModel() { Time = DateTime.Now.AddMinutes(-45), Reading = 5m},
@@ -105,9 +98,9 @@ namespace JOIEnergy.Tests
 
             //Assert
             Assert.Equal(3, actualCosts.Count);
-            Assert.Equal(166.667m, actualCosts["" + Supplier.DrEvilsDarkEnergy], 3);
-            Assert.Equal(33.333m, actualCosts["" + Supplier.TheGreenEco], 3);
-            Assert.Equal(16.667m, actualCosts["" + Supplier.PowerForEveryone], 3);
+            Assert.Equal(166.667m, actualCosts[Supplier.DrEvilsDarkEnergy.ToString()], 3);
+            Assert.Equal(33.333m, actualCosts[Supplier.TheGreenEco.ToString()], 3);
+            Assert.Equal(16.667m, actualCosts[Supplier.PowerForEveryone.ToString()], 3);
         }
 
         private static List<PeakTimeMultiplierModel> NoMultipliers()

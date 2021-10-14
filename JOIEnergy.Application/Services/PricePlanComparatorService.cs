@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JOIEnergy.Application.UsageCostPricePlan;
 
 namespace JOIEnergy.Application.Services
 {
@@ -19,7 +20,9 @@ namespace JOIEnergy.Application.Services
 
         private Dictionary<string, decimal> GetConsumptionCostOfElectricityReadingsForEachPricePlan(string smartMeterId)
         {
-            return _usageCostPricePlanProvider.GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
+            return _usageCostPricePlanProvider.GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId)
+                        .OrderBy(x => x.Value)
+                        .ToDictionary(x => x.Key, x => x.Value);
         }
 
         public Dictionary<string, decimal> GetRecommendedUsageCostPricePlans(string smartMeterId, int? recommendLimit)
@@ -29,12 +32,12 @@ namespace JOIEnergy.Application.Services
                 return GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
             }
 
-            var items = GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId).OrderBy(x => x.Value);
+            var items = GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
             var pagingItems = recommendLimit.Value > items.Count()
                 ? items
                 : items.Take(recommendLimit.Value);
 
-            return pagingItems.ToList().ToDictionary(x => x.Key, x => x.Value);
+            return pagingItems.ToDictionary(x => x.Key, x => x.Value);
         }
     }
 }
