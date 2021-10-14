@@ -1,5 +1,6 @@
 ﻿using System;
 using JOIEnergy.Application.Interfaces;
+using JOIEnergy.Extensions;
 using JOIEnergy.Infrastructure.EF;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -14,25 +15,7 @@ namespace JOIEnergy
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    var context = services.GetRequiredService<JOIEnergyDbContext>();
-                    //context.Database.EnsureCreated();
-                    context.Database.Migrate();
-
-                    var initializer = services.GetRequiredService<IDatabaseInitializer>();
-                    initializer.Seed().Wait();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred seeding the DB.");
-                }
-            }
+            host.MigrateDbContext<JOIEnergyDbContext>();
 
             host.Run();
         }

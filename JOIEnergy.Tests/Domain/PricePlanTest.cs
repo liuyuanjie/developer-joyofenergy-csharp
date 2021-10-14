@@ -44,6 +44,5 @@ namespace JOIEnergy.Tests.Domain
         {
             Assert.Equal(40m, _pricePlan.GetPrice(new DateTime(2018, 1, 6)));
         }
-
     }
 }

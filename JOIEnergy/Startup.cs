@@ -26,12 +26,12 @@ namespace JOIEnergy
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.Converters.Add(new JOIEnergy.Infrastructure.Share.DateTimeConverter());
+                    options.JsonSerializerOptions.Converters.Add(new Infrastructure.Share.DateTimeConverter());
                 });
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IMeterReadingService, MeterReadingService>();
