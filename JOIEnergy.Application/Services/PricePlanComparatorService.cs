@@ -14,14 +14,27 @@ namespace JOIEnergy.Application.Services
 
         public Dictionary<string, decimal> GetAllUsageCostPricePlans(string smartMeterId)
         {
+            return GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
+        }
+
+        private Dictionary<string, decimal> GetConsumptionCostOfElectricityReadingsForEachPricePlan(string smartMeterId)
+        {
             return _usageCostPricePlanProvider.GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
         }
 
-        public Dictionary<string, decimal> GetRecommendedUsageCostPricePlans(string smartMeterId, int recommendLimit)
+        public Dictionary<string, decimal> GetRecommendedUsageCostPricePlans(string smartMeterId, int? recommendLimit)
         {
-            var items = _usageCostPricePlanProvider.GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId)
-                .OrderBy(x => x.Value);
-            return ((recommendLimit > items.Count() ? items : items.Take(recommendLimit)).ToList()).ToDictionary(x => x.Key, x => x.Value);
+            if (!recommendLimit.HasValue || recommendLimit.Value <= 0)
+            {
+                return GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId);
+            }
+
+            var items = GetConsumptionCostOfElectricityReadingsForEachPricePlan(smartMeterId).OrderBy(x => x.Value);
+            var pagingItems = recommendLimit.Value > items.Count()
+                ? items
+                : items.Take(recommendLimit.Value);
+
+            return pagingItems.ToList().ToDictionary(x => x.Key, x => x.Value);
         }
     }
 }

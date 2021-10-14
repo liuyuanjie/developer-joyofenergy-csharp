@@ -8,6 +8,6 @@ namespace JOIEnergy.Application
     public interface IPricePlanComparatorService
     {
         Dictionary<string, decimal> GetAllUsageCostPricePlans(string smartMeterId);
-        Dictionary<string, decimal> GetRecommendedUsageCostPricePlans(string smartMeterId, int recommendLimit);
+        Dictionary<string, decimal> GetRecommendedUsageCostPricePlans(string smartMeterId, int? recommendLimit);
     }
 }
