@@ -235,3 +235,28 @@ $ dotnet run --project JOIEnergy
 ```
 
 If you're running from Visual Studio the default url might be `http://localhost:5000/api/values`. If that's the case, then you need to remove the `api/values` part from the URL.
+
+### Update Note
+- add swagger
+- add entityframework core to persistent
+- remove the hard code init data to init seed data
+- separate the recommend price plan business
+- improve the architecture layer
+- improve the smart meter, account, power company
+   - **Old**
+   - No Account information
+   - No Power Company information
+   - Smart Meters are related the company Supplier
+   - price plans are related the commpany Supplier
+   - **New**
+   - One Acount could have multiple Smart Meters
+   - One Power Compnay could have multiple price plans
+   - One Smart Meters are related one price plan
+   - Note: add the type for Smart Meters, and add type for price plans.
+- For code
+  - Add new request/respone Model insteadof domain model for api
+  - respone model Date doesn't 
+  - improve the unit tests, functional tests
+  - coler code
+  - add the usage code price paln provider interface.
+  - Async
