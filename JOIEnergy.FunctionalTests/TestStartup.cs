@@ -14,11 +14,10 @@ namespace JOIEnergy.FunctionalTests
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            base.ConfigureServices(services);
-
             services.AddControllers()
                 .AddApplicationPart(typeof(Startup).Assembly);
 
+            base.ConfigureServices(services);
         }
     }
 }
