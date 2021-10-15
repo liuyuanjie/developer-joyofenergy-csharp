@@ -45,9 +45,9 @@ namespace JOIEnergy.Controllers
             return new OkObjectResult(consumptionForPricePlans);
         }
 
-        private static BadRequestObjectResult NotFoundSmartMeterObjectResult(string smartMeterId)
+        private static NotFoundObjectResult NotFoundSmartMeterObjectResult(string smartMeterId)
         {
-            return new BadRequestObjectResult($"Smart Meter ID ({smartMeterId}) not found");
+            return new NotFoundObjectResult($"Smart Meter ID ({smartMeterId}) can not found");
         }
     }
 }
