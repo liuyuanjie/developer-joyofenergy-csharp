@@ -14,7 +14,7 @@ using Xunit;
 
 namespace JOIEnergy.Tests.Application.Services
 {
-    public class MeterReadingServiceTest: ServiceBase
+    public class MeterReadingServiceTest : ServiceBase
     {
         private static string SMART_METER_ID = "smart-meter-id";
         private readonly List<ElectricityReadingModel> _electricityReadingModels;
@@ -85,6 +85,108 @@ namespace JOIEnergy.Tests.Application.Services
             var electricityReadings = _meterReadingService.GetReadings(SMART_METER_ID);
 
             Assert.Equal(3, electricityReadings.Count);
+        }
+
+        [Fact]
+        public void GivenValidSmartMeterIdAndOneDateShouldReturnLastWeekReadingWithoutBeforeLastMondayReadings()
+        {
+            var dateTime = DateTime.Today;
+            var currentWeekMonday = dateTime.AddDays(-(byte)DateTime.Now.DayOfWeek);
+            var lastWeekMonday = currentWeekMonday.AddDays(-7);
+            _electricityReadingModels.AddRange(new List<ElectricityReadingModel>()
+            {
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekMonday.AddDays(-1)
+                },
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekMonday.AddDays(-7)
+                },
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekMonday.AddDays(-10)
+                }
+            });
+
+            var smartMeter = new SmartMeter()
+            {
+                SmartMeterId = SMART_METER_ID,
+                ElectricityReadings = _electricityReadingModels.Select(x => new ElectricityReading()
+                {
+                    Time = x.Time,
+                    Reading = x.Reading
+                }).ToList()
+            };
+
+            SmartMeterRepositoryMock.Setup(x => x.Query())
+                .Returns(new List<SmartMeter>()
+                {
+                    smartMeter
+                }.AsQueryable);
+
+            var electricityReadingModels = _meterReadingService.GetLastWeekReadings(SMART_METER_ID, dateTime);
+
+            Assert.Equal(2, electricityReadingModels.Count);
+        }
+
+        [Fact]
+        public void GivenValidSmartMeterIdAndOneDateShouldReturnLastWeekReadingWithoutAfterLastSundayReadings()
+        {
+            var dateTime = DateTime.Today;
+            var currentWeekMonday = dateTime.AddDays(-(byte)DateTime.Now.DayOfWeek);
+            var lastWeekSunday = currentWeekMonday.AddDays(-1);
+            _electricityReadingModels.AddRange(new List<ElectricityReadingModel>()
+            {
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekSunday.AddDays(-1)
+                },
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekSunday.AddDays(-2)
+                },
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekSunday.AddDays(1)
+                },
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekSunday.AddDays(7)
+                },
+                new ElectricityReadingModel()
+                {
+                    Reading = 10m,
+                    Time = lastWeekSunday.AddDays(10)
+                }
+            });
+
+            var smartMeter = new SmartMeter()
+            {
+                SmartMeterId = SMART_METER_ID,
+                ElectricityReadings = _electricityReadingModels.Select(x => new ElectricityReading()
+                {
+                    Time = x.Time,
+                    Reading = x.Reading
+                }).ToList()
+            };
+
+            SmartMeterRepositoryMock.Setup(x => x.Query())
+                .Returns(new List<SmartMeter>()
+                {
+                    smartMeter
+                }.AsQueryable);
+
+            var electricityReadingModels = _meterReadingService.GetLastWeekReadings(SMART_METER_ID, dateTime);
+
+            Assert.Equal(2, electricityReadingModels.Count);
         }
     }
 }

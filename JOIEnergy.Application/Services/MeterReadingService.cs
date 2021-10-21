@@ -24,7 +24,7 @@ namespace JOIEnergy.Application.Services
         public List<ElectricityReadingModel> GetReadings(string smartMeterId)
         {
             var sql = "SELECT e.[Time], e.[Reading] FROM [ElectricityReadings] AS e " +
-                      "INNER JOIN [SmartMeters] AS s ON s.[Id] = e.[SmartMeterId] "+
+                      "INNER JOIN [SmartMeters] AS s ON s.[Id] = e.[SmartMeterId] " +
                       "WHERE s.[SmartMeterId] = @smartMeterId";
             using (var conn = _connection.OpenConnection())
             {
@@ -32,7 +32,7 @@ namespace JOIEnergy.Application.Services
             }
         }
 
-        public async Task<int>  StoreReadings(ElectricityReadingCommand command)
+        public async Task<int> StoreReadings(ElectricityReadingCommand command)
         {
             if (!IsMeterReadingsValid(command))
             {
@@ -47,6 +47,25 @@ namespace JOIEnergy.Application.Services
 
             _repository.Update(smartMeter);
             return await _repository.UnitOfWork.CommitAsync();
+        }
+
+        public List<ElectricityReadingModel> GetLastWeekReadings(string smartMeterId, DateTime date)
+        {
+            var dateTime = DateTime.Today;
+            var currentWeekMonday = dateTime.AddDays(-(byte)DateTime.Now.DayOfWeek);
+            var lastWeekMonday = currentWeekMonday.AddDays(-7);
+            var lastWeekSunday = currentWeekMonday;
+
+            return _repository
+                .Query()
+                .Where(x => x.SmartMeterId == smartMeterId)
+                .SelectMany(x => x.ElectricityReadings)
+                .Where(e => e.Time > lastWeekMonday && e.Time < lastWeekSunday)
+                .Select(s => new ElectricityReadingModel()
+                {
+                    Reading = s.Reading,
+                    Time = s.Time
+                }).ToList();
         }
 
         private bool IsMeterReadingsValid(ElectricityReadingCommand electricityReadingCommand)
